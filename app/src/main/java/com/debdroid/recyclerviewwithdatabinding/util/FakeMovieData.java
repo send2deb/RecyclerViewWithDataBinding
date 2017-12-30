@@ -137,4 +137,40 @@ public class FakeMovieData {
 
         return movieList;
     }
+
+    public static ArrayList<Movie> getMoreFakeMovieList () {
+        ArrayList<Movie> moreMovieList = new ArrayList<>();
+
+        Movie movie1 = new Movie("Pitch Perfect 3",
+                "Comedy",
+                "21 Dec 2017",
+                "https://image.tmdb.org/t/p/w185/hQriQIpHUeh66I89gypFXtqEuVq.jpg");
+        moreMovieList.add(movie1);
+
+        Movie movie2 = new Movie("Deadpool",
+                "Action|Adventure",
+                "09 Feb 2016",
+                "https://image.tmdb.org/t/p/w185/inVq3FRqcYIRl2la8iZikYYxFNR.jpg");
+        moreMovieList.add(movie2);
+
+        Movie movie3 = new Movie("American Made",
+                "Action|History|Comedy",
+                "17 Aug 2017",
+                "https://image.tmdb.org/t/p/w185/23ILgoPSO5ShKcTZOuiTVfqFAUB.jpg");
+        moreMovieList.add(movie3);
+
+        Movie movie4 = new Movie("The Tribes of Palos Verdes",
+                "Drama",
+                "01 Dec 2017",
+                "https://image.tmdb.org/t/p/w185/8w4JecmVtqcSMk4mdiHURzISsYz.jpg");
+        moreMovieList.add(movie4);
+
+        Movie movie5 = new Movie("Baby Driver",
+                "Action|Crime",
+                "28 Jun 2017s",
+                "https://image.tmdb.org/t/p/w185/dN9LbVNNZFITwfaRjl4tmwGWkRg.jpg");
+        moreMovieList.add(movie5);
+
+        return moreMovieList;
+    }
 }

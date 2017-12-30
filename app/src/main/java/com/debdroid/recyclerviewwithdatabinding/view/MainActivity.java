@@ -10,26 +10,57 @@ import com.debdroid.recyclerviewwithdatabinding.R;
 import com.debdroid.recyclerviewwithdatabinding.databinding.ActivityMainBinding;
 import com.debdroid.recyclerviewwithdatabinding.viewmodel.MovieViewModel;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.Observable;
+import java.util.Observer;
+
+public class MainActivity extends AppCompatActivity implements Observer {
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private MovieViewModel mMovieViewModel;
+    private ActivityMainBinding mActivityMainBinding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Initialize the Data Binding and set the view model
-        ActivityMainBinding activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        MovieViewModel movieViewModel = new MovieViewModel();
-        activityMainBinding.setMovieViewModel(movieViewModel);
+        mActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mMovieViewModel = new MovieViewModel();
+        mActivityMainBinding.setMovieViewModel(mMovieViewModel);
 
-        mRecyclerView = activityMainBinding.rvMovieRecyclerView;
+        // Set the observer
+        mMovieViewModel.addObserver(this);
+
+        // Set the RecyclerView
+        mRecyclerView = mActivityMainBinding.rvMovieRecyclerView;
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
         mMovieAdapter = new MovieAdapter();
-        mMovieAdapter.setMovieList(movieViewModel.getMovieList());
         mRecyclerView.setAdapter(mMovieAdapter);
+
+        // Load initial movies using regular way
+        mMovieAdapter.setMovieList(mMovieViewModel.getMovieList());
+
+        // Load some movies using Reactive Programming (RxAndroid)
+        mMovieViewModel.loadMoreMoviesUsingRx();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mMovieViewModel.houseKeeping();
+    }
+
+    // This update method will be called when the class (MovieViewModel) will call 'notifyObservers()'
+    @Override
+    public void update(Observable o, Object arg) {
+        if( o instanceof MovieViewModel) {
+            final MovieAdapter adapter = (MovieAdapter) mActivityMainBinding.rvMovieRecyclerView.getAdapter();
+            adapter.notifyDataSetChanged();
+        }
     }
 }
